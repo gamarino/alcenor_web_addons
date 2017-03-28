@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp><data>
+
+    <record id="remote_pos_operator_group" model="res.groups">
+        <field name="name">Remote POS Operator</field>
+        <field name="category_id" ref="base.module_category_accounting_and_finance"/>
+    </record>
+
+</data></openerp>

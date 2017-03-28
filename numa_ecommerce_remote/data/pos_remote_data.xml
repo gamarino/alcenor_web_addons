@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="True">
+
+        <record model="dbsynch.remote_server" id="pos_master">
+            <field name="name">POS Master</field>
+            <field name="master_type">pos_remote</field>
+            <field name="pos_group_name">&lt;POS Group Name&gt;</field>
+            <field name="url">http://&lt;master_url&gt;</field>
+            <field name="remote_dbname">&lt;Master db name&gt;</field>
+            <field name="login">&lt;Master login&gt;</field>
+            <field name="password">password</field>
+        </record>
+
+    </data>
+
+    <data>
+
+        <record model="dbsynch.remote_object" id="master_res_company">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','res.company')]" />
+            <field name="selection">[]</field>
+        </record>
+
+        <record model="dbsynch.remote_object" id="master_product_category">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','product.category')]" />
+            <field name="selection">[]</field>
+        </record>
+
+        <record model="dbsynch.remote_object" id="master_products">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','product.product')]" />
+            <field name="selection">[]</field>
+        </record>
+
+        <record model="dbsynch.remote_object" id="master_partners">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','res.partner')]" />
+            <field name="selection">[('customer','=',True)]</field>
+        </record>
+
+        <record model="dbsynch.remote_object" id="master_pricelists">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','product.pricelist')]" />
+            <field name="selection">[]</field>
+        </record>
+
+        <record model="dbsynch.remote_object" id="master_pos_config">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','pos.config')]" />
+            <field name="selection">[('pos_group.name','=','&lt;Remote POS Group&gt;')]</field>
+        </record>
+
+        <record model="dbsynch.remote_object" id="master_pos_category">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','pos.category')]" />
+            <field name="selection">[]</field>
+        </record>
+
+        <record model="dbsynch.local_object" id="local_partners">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','res.partner')]" />
+            <field name="selection">[('customer','=',True)]</field>
+        </record>
+
+        <record model="dbsynch.local_object" id="local_pos_order">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','pos.order')]" />
+            <field name="selection">[('session_id.config_id.pos_group.name','=','&lt;Remote POS Group&gt;')]</field>
+        </record>
+
+<!--
+
+    Record mappings
+
+-->
+
+        <record model="dbsynch.remote_shared_model" id="model_pos_config">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','pos.config')]" />
+            <field name="no_update" >True</field>
+        </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_pos_session">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','pos.session')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_session_name">
+                <field name="shared_model" ref="model_pos_session" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.session'),('name','=','name')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_session_config_id">
+                <field name="shared_model" ref="model_pos_session" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.session'),('name','=','config_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_session_start_at">
+                <field name="shared_model" ref="model_pos_session" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.session'),('name','=','start_at')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_session_stop_at">
+                <field name="shared_model" ref="model_pos_session" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.session'),('name','=','stop_at')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_session_state">
+                <field name="shared_model" ref="model_pos_session" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.session'),('name','=','state')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_session_sequence_number">
+                <field name="shared_model" ref="model_pos_session" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.session'),('name','=','sequence_number')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_session_login_number">
+                <field name="shared_model" ref="model_pos_session" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.session'),('name','=','login_number')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_session_order_ids">
+                <field name="shared_model" ref="model_pos_session" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.session'),('name','=','order_ids')]" />
+            </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_pos_order">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','pos.order')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_name">
+                <field name="shared_model" ref="model_pos_order" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order'),('name','=','name')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_company_id">
+                <field name="shared_model" ref="model_pos_order" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order'),('name','=','company_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_date_order">
+                <field name="shared_model" ref="model_pos_order" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order'),('name','=','date_order')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_lines">
+                <field name="shared_model" ref="model_pos_order" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order'),('name','=','lines')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_pricelist_id">
+                <field name="shared_model" ref="model_pos_order" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order'),('name','=','pricelist_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_partner_id">
+                <field name="shared_model" ref="model_pos_order" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order'),('name','=','partner_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_sequence_number">
+                <field name="shared_model" ref="model_pos_order" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order'),('name','=','sequence_number')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_state">
+                <field name="shared_model" ref="model_pos_order" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order'),('name','=','state')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_invoice_id">
+                <field name="shared_model" ref="model_pos_order" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order'),('name','=','invoice_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_note">
+                <field name="shared_model" ref="model_pos_order" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order'),('name','=','note')]" />
+            </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_pos_order_line">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','pos.order.line')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_line_name">
+                <field name="shared_model" ref="model_pos_order_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order.line'),('name','=','name')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_company_id">
+                <field name="shared_model" ref="model_pos_order_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order.line'),('name','=','company_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_line_notice">
+                <field name="shared_model" ref="model_pos_order_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order.line'),('name','=','notice')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_line_product_id">
+                <field name="shared_model" ref="model_pos_order_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order.line'),('name','=','product_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_line_price_unit">
+                <field name="shared_model" ref="model_pos_order_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order.line'),('name','=','price_unit')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_line_qty">
+                <field name="shared_model" ref="model_pos_order_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order.line'),('name','=','qty')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_line_discount">
+                <field name="shared_model" ref="model_pos_order_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order.line'),('name','=','discount')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_pos_order_line_create_date">
+                <field name="shared_model" ref="model_pos_order_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','pos.order.line'),('name','=','create_date')]" />
+            </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_res_company">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','res.company')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_company_id">
+                <field name="shared_model" ref="model_res_company" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.company'),('name','=','id')]" />
+            </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_product_pricelist">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','product.pricelist')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_product_pricelist_id">
+                <field name="shared_model" ref="model_product_pricelist" />
+                <field name="field" 
+                       search="[('model_id.model','=','product.pricelist'),('name','=','id')]" />
+            </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_product_product">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','product.product')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_product_product_id">
+                <field name="shared_model" ref="model_product_product" />
+                <field name="field" 
+                       search="[('model_id.model','=','product.product'),('name','=','id')]" />
+            </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_product_template">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','product.template')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_product_template_id">
+                <field name="shared_model" ref="model_product_template" />
+                <field name="field" 
+                       search="[('model_id.model','=','product.template'),('name','=','id')]" />
+            </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_product_category">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','product.category')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_product_category_id">
+                <field name="shared_model" ref="model_product_category" />
+                <field name="field" 
+                       search="[('model_id.model','=','product.category'),('name','=','id')]" />
+            </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_res_currency">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','res.currency')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_currency_id">
+                <field name="shared_model" ref="model_res_currency" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.currency'),('name','=','id')]" />
+            </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_res_partner">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','res.partner')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_name">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','name')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_parent_id">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','parent_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_customer">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','customer')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_employee">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','employee')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_function">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','function')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_type">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','type')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_street">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','street')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_street2">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','street2')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_zip">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','zip')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_city">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','city')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_state_id">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','state_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_country_id">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','country_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_email">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','email')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_phone">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','phone')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_fax">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','fax')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_mobile">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','mobile')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_birthdate">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','birthdate')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_is_company">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','is_company')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_use_parent_address">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','use_parent_address')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_image">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','image')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_res_partner_ean13">
+                <field name="shared_model" ref="model_res_partner" />
+                <field name="field" 
+                       search="[('model_id.model','=','res.partner'),('name','=','ean13')]" />
+            </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_account_invoice">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','account.invoice')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_name">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','name')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_origin">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','origin')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_type">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','type')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_number">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','number')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_reference">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','reference')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_reference_type">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','reference_type')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_comment">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','comment')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_state">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','state')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_date_invoice">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','date_invoice')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_date_due">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','date_due')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_partner_id">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','partner_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_payment_term">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','payment_term')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_invoice_line">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','invoice_line')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_amount_untaxed">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','amount_untaxed')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_amount_tax">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','amount_tax')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_amount_total">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','amount_total')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_currency_id">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','currency_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_company_id">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice'),('name','=','company_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_account_id">
+                <field name="shared_model" ref="model_account_invoice" />
+                <field name="field"
+                       search="[('model_id.model','=','account.invoice'),('name','=','account_id')]" />
+            </record>
+
+        <record model="dbsynch.remote_shared_model" id="model_account_invoice_line">
+            <field name="remote_server" ref="pos_master" />
+            <field name="model" search="[('model','=','account.invoice.line')]" />
+        </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_line_name">
+                <field name="shared_model" ref="model_account_invoice_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice.line'),('name','=','name')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_line_origin">
+                <field name="shared_model" ref="model_account_invoice_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice.line'),('name','=','origin')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_line_sequence">
+                <field name="shared_model" ref="model_account_invoice_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice.line'),('name','=','sequence')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_line_uos_id">
+                <field name="shared_model" ref="model_account_invoice_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice.line'),('name','=','uos_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_line_product_id">
+                <field name="shared_model" ref="model_account_invoice_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice.line'),('name','=','product_id')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_line_price_unit">
+                <field name="shared_model" ref="model_account_invoice_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice.line'),('name','=','price_unit')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_line_price_subtotal">
+                <field name="shared_model" ref="model_account_invoice_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice.line'),('name','=','price_subtotal')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_line_quantity">
+                <field name="shared_model" ref="model_account_invoice_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice.line'),('name','=','quantity')]" />
+            </record>
+
+            <record model="dbsynch.remote_shared_field" id="model_account_invoice_line_discount">
+                <field name="shared_model" ref="model_account_invoice_line" />
+                <field name="field" 
+                       search="[('model_id.model','=','account.invoice.line'),('name','=','discount')]" />
+            </record>
+
+
+   </data>
+</openerp>

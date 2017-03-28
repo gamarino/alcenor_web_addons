@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="dbsynch_remote_server_form">
+            <field name="name">POS Remote Server form</field>
+            <field name="model">dbsynch.remote_server</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="numa_dbsynch_remote.dbsynch_remote_server_form" />
+            <field name="arch" type="xml">
+                <data>
+                    <group name="master_type" position="inside">
+                        <group colspan="2" attrs="{'invisible': [('master_type','!=','pos_remote')]}">
+                            <field name="pos_group_name"/>
+                        </group>
+                    </group>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</openerp>

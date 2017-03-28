@@ -1,0 +1,45 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* numa_pos_remote
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-02-28 21:16+0000\n"
+"PO-Revision-Date: 2017-02-28 21:16+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: numa_pos_remote
+#: code:addons/numa_pos_remote/models/pos_remote.py:104
+#, python-format
+msgid "Error"
+msgstr "Error"
+
+#. module: numa_pos_remote
+#: code:addons/numa_pos_remote/models/pos_remote.py:105
+#, python-format
+msgid "On model %s, identifier %s was not found on local database! Please add the object and retry"
+msgstr "El modelo %s, identificador %s no se encontró en la base local! Por favor agregue el mismo y vuelva a intentar"
+
+#. module: numa_pos_remote
+#: code:addons/numa_pos_remote/models/pos_remote.py:44
+#, python-format
+msgid "POS Remote"
+msgstr "PdV Remoto"
+
+#. module: numa_pos_remote
+#: model:res.groups,name:numa_pos_remote.remote_pos_operator_group
+msgid "Remote POS Operator"
+msgstr "Operador PdV Remoto"
+
+#. module: numa_pos_remote
+#: field:dbsynch.remote_server,pos_group_name:0
+msgid "Remote group name"
+msgstr "Nombre de grupo remoto"
+
